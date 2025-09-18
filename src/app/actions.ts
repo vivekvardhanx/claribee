@@ -15,7 +15,7 @@ export async function sendMessage(
     query: query,
     pdfContent: pdfContent,
     // The initial response acts as a system prompt for the refiner model.
-    initialResponse: "You are CampusConnect, a helpful AI assistant for college-related questions. Provide a clear, friendly, and comprehensive answer to the user's query.",
+    initialResponse: "You are Claribee 🐝, a helpful AI assistant for college-related questions. Provide a clear, friendly, and comprehensive answer to the user's query.",
   };
 
   try {
