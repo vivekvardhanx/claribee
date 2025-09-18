@@ -3,7 +3,7 @@ import { Toaster } from '@/components/ui/toaster';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'Claribee 🐝 Chat',
+  title: 'Claribee 🐝',
   description: 'An intelligent chatbot for your college.',
 };
 

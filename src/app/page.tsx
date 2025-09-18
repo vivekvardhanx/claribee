@@ -96,7 +96,7 @@ export default function Home() {
         <CardHeader className="bg-primary text-primary-foreground rounded-t-2xl flex-row items-center gap-4">
           <BrainCircuit className="w-10 h-10" />
           <div>
-            <h1 className="text-xl font-bold font-headline">Claribee 🐝 Chat</h1>
+            <h1 className="text-xl font-bold font-headline">Claribee 🐝</h1>
             <p className="text-sm text-primary-foreground/80">Your AI guide to college life</p>
           </div>
         </CardHeader>
