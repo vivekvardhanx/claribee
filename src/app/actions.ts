@@ -1,20 +1,29 @@
 "use server";
 
 import { refineBotResponse, RefineBotResponseInput } from '@/ai/flows/refine-bot-response';
+import pdf from 'pdf-parse';
+
+async function getPdfContent(pdfBase64: string): Promise<string> {
+  if (!pdfBase64) return '';
+  try {
+    const pdfBuffer = Buffer.from(pdfBase64, 'base64');
+    const data = await pdf(pdfBuffer);
+    return data.text;
+  } catch (error) {
+    console.error('Error parsing PDF:', error);
+    return '';
+  }
+}
 
 export async function sendMessage(
   query: string,
+  pdfBase64: string = ''
 ): Promise<string> {
-  // The user prompt allows for PDF uploads, but we cannot process PDF file
-  // content on the server without adding a new dependency (e.g., pdf-parse),
-  // which is outside the scope of this task.
-  // Therefore, we pass an empty string for pdfContent.
-  const pdfContent = '';
+  const pdfContent = await getPdfContent(pdfBase64);
 
   const input: RefineBotResponseInput = {
     query: query,
     pdfContent: pdfContent,
-    // The initial response acts as a system prompt for the refiner model.
     initialResponse: "You are Claribee 🐝, a helpful AI assistant for college-related questions. Provide a clear, friendly, and comprehensive answer to the user's query.",
   };
 
@@ -23,7 +32,6 @@ export async function sendMessage(
     return result.refinedResponse;
   } catch (error) {
     console.error('Error calling GenAI flow:', error);
-    // Propagate the error to be handled by the client
     throw new Error('An error occurred while communicating with the AI. Please try again.');
   }
 }

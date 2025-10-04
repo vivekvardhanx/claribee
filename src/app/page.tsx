@@ -19,6 +19,20 @@ type Message = {
   text: string;
 };
 
+const fileToBas64 = (file: File): Promise<string> => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => {
+      const result = reader.result as string;
+      const base64 = result.split(',')[1];
+      resolve(base64);
+    };
+    reader.onerror = (error) => reject(error);
+  });
+};
+
+
 export default function Home() {
   const [messages, setMessages] = useState<Message[]>([
     { id: 'initial-message', sender: 'bot', text: "Hello! I'm Claribee 🐝. How can I assist you with college-related questions today?" }
@@ -47,10 +61,25 @@ export default function Home() {
     setMessages(prev => [...prev, userMessage]);
     setIsLoading(true);
     setInput("");
+    
+    let pdfBase64 = '';
+    if (pdfFile) {
+      try {
+        pdfBase64 = await fileToBas64(pdfFile);
+      } catch (error) {
+        toast({
+          variant: "destructive",
+          title: "Error reading file",
+          description: "There was a problem processing the PDF file.",
+        });
+        setIsLoading(false);
+        return;
+      }
+    }
     setPdfFile(null);
 
     try {
-      const botResponseText = await sendMessage(userQuery);
+      const botResponseText = await sendMessage(userQuery, pdfBase64);
       const botMessage: Message = { id: crypto.randomUUID(), sender: 'bot', text: botResponseText };
       setMessages(prev => [...prev, botMessage]);
     } catch (error) {
