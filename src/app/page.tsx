@@ -30,12 +30,10 @@ export default function Home() {
 
   useEffect(() => {
     // Set initial message only on the client-side to avoid hydration mismatch
-    if (messages.length === 0) {
-        setMessages([
-            { id: crypto.randomUUID(), sender: 'bot', text: "Hello! I'm Claribee 🐝. How can I assist you with college-related questions today?" }
-        ]);
-    }
-  }, [messages.length]);
+    setMessages([
+        { id: crypto.randomUUID(), sender: 'bot', text: "Hello! I'm Claribee 🐝. How can I assist you with college-related questions today?" }
+    ]);
+  }, []);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
