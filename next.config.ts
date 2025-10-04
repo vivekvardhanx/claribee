@@ -30,6 +30,12 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  webpack: (config, { isServer }) => {
+    // This is a workaround for a bug in pdf-parse.
+    // See https://github.com/adrienjoly/pdf-parse/issues/34
+    config.resolve.alias['pdf-parse/lib/pdf.js/v1.10.100/build/pdf.js'] = false;
+    return config;
+  },
 };
 
 export default nextConfig;

@@ -1,0 +1,22 @@
+diff --git a/node_modules/pdf-parse/package.json b/node_modules/pdf-parse/package.json
+index 219a5ca..815159a 100644
+--- a/node_modules/pdf-parse/package.json
++++ b/node_modules/pdf-parse/package.json
+@@ -3,7 +3,6 @@
+   "description": "read text and meta data from a PDF",
+   "main": "index.js",
+   "scripts": {
+-    "test": "node test/test.js",
+     "lint": "eslint --ignore-path .gitignore ."
+   },
+   "repository": {
+@@ -21,7 +20,6 @@
+   "license": "ISC",
+   "bugs": {
+     "url": "https://github.com/dbashford/pdf-parse/issues"
+-  },
+-  "homepage": "https://github.com/dbashford/pdf-parse#readme",
+-  "files": [ "index.js", "lib", "test" ]
++  },  "homepage": "https://github.com/dbashford/pdf-parse#readme",
++  "files": [ "index.js", "lib" ]
+ }
