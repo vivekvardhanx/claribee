@@ -29,10 +29,13 @@ export default function Home() {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    setMessages([
-      { id: crypto.randomUUID(), sender: 'bot', text: "Hello! I'm Claribee 🐝. How can I assist you with college-related questions today?" }
-    ]);
-  }, []);
+    // Set initial message only on the client-side to avoid hydration mismatch
+    if (messages.length === 0) {
+        setMessages([
+            { id: crypto.randomUUID(), sender: 'bot', text: "Hello! I'm Claribee 🐝. How can I assist you with college-related questions today?" }
+        ]);
+    }
+  }, [messages.length]);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
