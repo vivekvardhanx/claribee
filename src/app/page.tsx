@@ -20,15 +20,19 @@ type Message = {
 };
 
 export default function Home() {
-  const [messages, setMessages] = useState<Message[]>([
-    { id: crypto.randomUUID(), sender: 'bot', text: "Hello! I'm Claribee 🐝. How can I assist you with college-related questions today?" }
-  ]);
+  const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [pdfFile, setPdfFile] = useState<File | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    setMessages([
+      { id: crypto.randomUUID(), sender: 'bot', text: "Hello! I'm Claribee 🐝. How can I assist you with college-related questions today?" }
+    ]);
+  }, []);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
