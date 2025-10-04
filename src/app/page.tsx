@@ -34,15 +34,20 @@ const fileToBas64 = (file: File): Promise<string> => {
 
 
 export default function Home() {
-  const [messages, setMessages] = useState<Message[]>([
-    { id: 'initial-message', sender: 'bot', text: "Hello! I'm Claribee 🐝. How can I assist you with college-related questions today?" }
-  ]);
+  const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [pdfFile, setPdfFile] = useState<File | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    // Set initial message only on the client to avoid hydration issues.
+    setMessages([
+      { id: 'initial-message', sender: 'bot', text: "Hello! I'm Claribee 🐝. How can I assist you with college-related questions today?" }
+    ]);
+  }, []);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
