@@ -1,7 +1,7 @@
 "use server";
 
 import { refineBotResponse, RefineBotResponseInput } from '@/ai/flows/refine-bot-response';
-import pdf from 'pdf-parse';
+import pdf from 'pdf-parse/lib/pdf-parse.js';
 
 async function getPdfContent(pdfBase64: string): Promise<string> {
   if (!pdfBase64) return '';
