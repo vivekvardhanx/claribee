@@ -31,7 +31,7 @@ export default function Home() {
   useEffect(() => {
     // Set initial message only on the client-side to avoid hydration mismatch
     setMessages([
-        { id: crypto.randomUUID(), sender: 'bot', text: "Hello! I'm Claribee 🐝. How can I assist you with college-related questions today?" }
+        { id: 'initial-message', sender: 'bot', text: "Hello! I'm Claribee 🐝. How can I assist you with college-related questions today?" }
     ]);
   }, []);
 
