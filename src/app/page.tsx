@@ -36,7 +36,7 @@ const fileToBas64 = (file: File): Promise<string> => {
 
 
 export default function Home() {
-  const [messages, setMessages] = useState<Message[]>([]);
+  const [messages, setMessages] = useState<Message[] | null>(null);
   const [input, setInput] = useState("");
   const [pdfFile, setPdfFile] = useState<File | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -45,7 +45,7 @@ export default function Home() {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    // Load messages from localStorage on initial render
+    // Load messages from localStorage on initial render, only on the client
     const storedMessages = localStorage.getItem("chatHistory");
     if (storedMessages) {
       setMessages(JSON.parse(storedMessages));
@@ -58,7 +58,7 @@ export default function Home() {
 
   useEffect(() => {
     // Save messages to localStorage whenever they change
-    if (messages.length > 0) {
+    if (messages && messages.length > 0) {
       localStorage.setItem("chatHistory", JSON.stringify(messages));
     }
   }, [messages]);
@@ -77,7 +77,7 @@ export default function Home() {
       sender: 'user', 
       text: userQuery || `File: ${pdfFile?.name}` 
     };
-    setMessages(prev => [...prev, userMessage]);
+    setMessages(prev => [...(prev || []), userMessage]);
     setIsLoading(true);
     setInput("");
     
@@ -100,7 +100,7 @@ export default function Home() {
     try {
       const botResponseText = await sendMessage(userQuery, pdfBase64);
       const botMessage: Message = { id: crypto.randomUUID(), sender: 'bot', text: botResponseText };
-      setMessages(prev => [...prev, botMessage]);
+      setMessages(prev => [...(prev || []), botMessage]);
     } catch (error) {
       toast({
         variant: "destructive",
@@ -108,7 +108,7 @@ export default function Home() {
         description: "There was a problem with your request. Please try again.",
       });
       const errorMessage: Message = { id: crypto.randomUUID(), sender: 'bot', text: "I'm having trouble connecting. Please try again later." };
-      setMessages(prev => [...prev, errorMessage]);
+      setMessages(prev => [...(prev || []), errorMessage]);
     } finally {
       setIsLoading(false);
     }
@@ -172,7 +172,7 @@ export default function Home() {
         <CardContent className="flex-1 p-0 overflow-hidden">
           <ScrollArea className="h-full">
             <div className="p-4 sm:p-6 space-y-6">
-              {messages.map((msg) => (
+              {messages && messages.map((msg) => (
                 <div key={msg.id} className={cn("flex items-end gap-3", msg.sender === 'user' ? 'justify-end' : '')}>
                   {msg.sender === 'bot' && (
                     <Avatar className="w-9 h-9 border">
