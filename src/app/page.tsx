@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import { sendMessage } from "./actions";
-import { Paperclip, SendHorizontal, BrainCircuit, Bot, User, X } from "lucide-react";
+import { Paperclip, SendHorizontal, BrainCircuit, Bot, User, X, History } from "lucide-react";
 
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -12,6 +12,7 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
 import { BotTypingIndicator } from "@/components/bot-typing-indicator";
+import { ThemeToggle } from "@/components/theme-toggle";
 
 type Message = {
   id: string;
@@ -43,11 +44,23 @@ export default function Home() {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    // Set initial message only on the client to avoid hydration issues.
-    setMessages([
-      { id: 'initial-message', sender: 'bot', text: "Hello! I'm Claribee 🐝. How can I assist you with college-related questions today?" }
-    ]);
+    // Load messages from localStorage on initial render
+    const storedMessages = localStorage.getItem("chatHistory");
+    if (storedMessages) {
+      setMessages(JSON.parse(storedMessages));
+    } else {
+      setMessages([
+        { id: 'initial-message', sender: 'bot', text: "Hello! I'm Claribee 🐝. How can I assist you with college-related questions today?" }
+      ]);
+    }
   }, []);
+
+  useEffect(() => {
+    // Save messages to localStorage whenever they change
+    if (messages.length > 0) {
+      localStorage.setItem("chatHistory", JSON.stringify(messages));
+    }
+  }, [messages]);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -124,14 +137,35 @@ export default function Home() {
     }
   };
 
+  const clearHistory = () => {
+    localStorage.removeItem("chatHistory");
+    setMessages([
+        { id: 'initial-message', sender: 'bot', text: "Hello! I'm Claribee 🐝. How can I assist you with college-related questions today?" }
+    ]);
+    toast({
+        title: "Chat History Cleared",
+        description: "Your conversation has been reset.",
+    })
+  };
+
+
   return (
     <main className="flex items-center justify-center min-h-screen bg-background p-2 sm:p-4">
       <Card className="w-full max-w-3xl h-[95vh] flex flex-col shadow-2xl rounded-2xl">
-        <CardHeader className="bg-primary text-primary-foreground rounded-t-2xl flex-row items-center gap-4">
-          <BrainCircuit className="w-10 h-10" />
-          <div>
-            <h1 className="text-xl font-bold font-headline">Claribee 🐝</h1>
-            <p className="text-sm text-primary-foreground/80">Your AI guide to college life</p>
+        <CardHeader className="bg-primary text-primary-foreground rounded-t-2xl flex-row items-center justify-between gap-4 p-4">
+          <div className="flex items-center gap-4">
+            <BrainCircuit className="w-10 h-10" />
+            <div>
+              <h1 className="text-xl font-bold font-headline">Claribee 🐝</h1>
+              <p className="text-sm text-primary-foreground/80">Your AI guide to college life</p>
+            </div>
+          </div>
+          <div className="flex items-center gap-2">
+            <Button variant="ghost" size="icon" onClick={clearHistory} className="text-primary-foreground hover:bg-primary/80 hover:text-primary-foreground">
+                <History className="h-5 w-5" />
+                <span className="sr-only">Clear History</span>
+            </Button>
+            <ThemeToggle />
           </div>
         </CardHeader>
         <CardContent className="flex-1 p-0 overflow-hidden">
@@ -146,7 +180,7 @@ export default function Home() {
                       </AvatarFallback>
                     </Avatar>
                   )}
-                  <div className={cn("max-w-[75%] p-3 rounded-xl shadow-sm", msg.sender === 'user' ? 'bg-primary text-primary-foreground rounded-br-none' : 'bg-secondary text-secondary-foreground rounded-bl-none')}>
+                  <div className={cn("max-w-[75%] p-3 rounded-xl shadow-sm", msg.sender === 'user' ? 'bg-primary text-primary-foreground rounded-br-none' : 'bg-card border rounded-bl-none')}>
                     <p className="text-sm whitespace-pre-wrap">{msg.text}</p>
                   </div>
                    {msg.sender === 'user' && (
