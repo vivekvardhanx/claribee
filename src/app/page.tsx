@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import { sendMessage } from "./actions";
-import { Paperclip, SendHorizontal, BrainCircuit, Bot, User, X, History } from "lucide-react";
+import { Paperclip, SendHorizontal, Bot, User, X, History } from "lucide-react";
 
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -13,6 +13,7 @@ import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
 import { BotTypingIndicator } from "@/components/bot-typing-indicator";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { ClaribeeLogo } from "@/components/claribee-logo";
 
 type Message = {
   id: string;
@@ -154,7 +155,7 @@ export default function Home() {
       <Card className="w-full max-w-3xl h-[95vh] flex flex-col shadow-2xl rounded-2xl">
         <CardHeader className="bg-primary text-primary-foreground rounded-t-2xl flex-row items-center justify-between gap-4 p-4">
           <div className="flex items-center gap-4">
-            <BrainCircuit className="w-10 h-10" />
+            <ClaribeeLogo className="w-10 h-10" />
             <div>
               <h1 className="text-xl font-bold font-headline">Claribee 🐝</h1>
               <p className="text-sm text-primary-foreground/80">Your AI guide to college life</p>
