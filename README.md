@@ -1,6 +1,6 @@
 # Claribee 🐝
 
-Welcome to Claribee, your friendly AI assistant for all things college-related! This project is a modern, interactive chatbot built in Firebase Studio, designed to provide helpful answers and guidance.
+Welcome to Claribee, your friendly AI assistant for all things college-related! This project is a modern, interactive chatbot designed to provide helpful answers and guidance.
 
 ## ✨ Features
 
